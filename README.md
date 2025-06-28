@@ -18,7 +18,7 @@ This project demonstrates a machine learning approach to classify movie reviews 
 │   └── predict.py         # Prediction script
 ├── requirements.txt       # Python dependencies
 └── README.md              # This document
-
+```
 
 ## Methodology
 
