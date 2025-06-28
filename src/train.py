@@ -1,65 +1,87 @@
-import os
-from sklearn.datasets import load_files
+import pandas as pd
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.linear_model import LogisticRegression
-from sklearn.model_selection import train_test_split
+from sklearn.metrics import accuracy_score
 import pickle
-import numpy as np
+import os
+import re
 
-def load_imdb_data():
-    """Load data from aclImdb folder with proper Windows paths"""
-    data_path = os.path.join('data', 'aclImdb', 'train')
-    reviews = load_files(data_path, 
-                       categories=['pos', 'neg'],
-                       shuffle=True,
-                       random_state=42,
-                       encoding='utf-8')
-    return reviews.data, reviews.target
+class NegationHandler:
+    """Identical negation handler used in predict.py"""
+    NEG_PREFIX = "NEG_"
+    
+    @classmethod
+    def transform(cls, text):
+        """Transform negations with protected spacing"""
+        text = text.lower()
+        patterns = [
+            (r"\b(not|no|never|nothing|nobody|none|neither|nor)\s+", cls.NEG_PREFIX),
+            (r"\b(can't|cannot|don't|doesn't|isn't|wasn't|shouldn't|won't)\b", cls.NEG_PREFIX + " ")
+        ]
+        for pattern, replacement in patterns:
+            text = re.sub(pattern, replacement, text)
+        return text
+
+def clean_text(text):
+    """Identical cleaning function used in predict.py"""
+    text = NegationHandler.transform(text)
+    text = re.sub(r'[^a-z ' + NegationHandler.NEG_PREFIX.lower() + ']', '', text)
+    text = re.sub(r' +', ' ', text).strip()
+    return text
 
 def train_model():
-    # Create model directory if not exists
+    # Create model directory
     os.makedirs('model', exist_ok=True)
     
-    # Load data using proper paths
-    print("Loading data from aclImdb...")
-    X, y = load_imdb_data()
-    
-    # Take 5000 balanced samples (2500 pos, 2500 neg)
-    X, y = X[:5000], y[:5000]
-    print(f"\nUsing {len(X)} samples ({np.sum(y)} positive, {len(y)-np.sum(y)} negative)")
-    
-    # Split data
-    X_train, X_test, y_train, y_test = train_test_split(
-        X, y, test_size=0.2, random_state=42
-    )
-    
+    # Load and verify data
+    print("Loading training data...")
+    try:
+        train_df = pd.read_csv('data/train_5k.csv')
+        test_df = pd.read_csv('data/test_5k.csv')
+        print(f"Training samples: {len(train_df)}")
+        print(f"Test samples: {len(test_df)}")
+    except Exception as e:
+        print(f"Error loading data: {e}")
+        return
+
+    # Clean text using identical pipeline
+    print("\nCleaning text data...")
+    train_df['cleaned_review'] = train_df['review'].apply(clean_text)
+    test_df['cleaned_review'] = test_df['review'].apply(clean_text)
+
     # Vectorize
-    print("\nCreating TF-IDF features...")
-    vectorizer = TfidfVectorizer(max_features=10000, stop_words='english')
-    X_train_vec = vectorizer.fit_transform(X_train)
-    X_test_vec = vectorizer.transform(X_test)
-    
-    # Train
-    print("Training Logistic Regression model...")
-    model = LogisticRegression(max_iter=1000)
-    model.fit(X_train_vec, y_train)
-    
+    print("Creating TF-IDF features...")
+    vectorizer = TfidfVectorizer(
+        max_features=10000,
+        ngram_range=(1, 2),  # Important for negation context
+        stop_words='english'
+    )
+    X_train = vectorizer.fit_transform(train_df['cleaned_review'])
+    X_test = vectorizer.transform(test_df['cleaned_review'])
+    y_train = train_df['sentiment']
+    y_test = test_df['sentiment']
+
+    # Train model
+    print("\nTraining Logistic Regression...")
+    model = LogisticRegression(
+        max_iter=1000,
+        class_weight='balanced',
+        verbose=1
+    )
+    model.fit(X_train, y_train)
+
     # Evaluate
-    train_acc = model.score(X_train_vec, y_train)
-    test_acc = model.score(X_test_vec, y_test)
-    print(f"\nTraining Accuracy: {train_acc:.2%}")
+    train_acc = accuracy_score(y_train, model.predict(X_train))
+    test_acc = accuracy_score(y_test, model.predict(X_test))
+    print(f"\nTrain Accuracy: {train_acc:.2%}")
     print(f"Test Accuracy: {test_acc:.2%}")
-    
+
     # Save models
-    vectorizer_path = os.path.join('model', 'vectorizer.pkl')
-    model_path = os.path.join('model', 'model.pkl')
-    
-    with open(vectorizer_path, 'wb') as f:
+    with open('model/vectorizer.pkl', 'wb') as f:
         pickle.dump(vectorizer, f)
-    with open(model_path, 'wb') as f:
+    with open('model/model.pkl', 'wb') as f:
         pickle.dump(model, f)
-    
-    print(f"\nModels saved to:\n{vectorizer_path}\n{model_path}")
+    print("\nModels saved to model/ directory")
 
 if __name__ == '__main__':
     train_model()
