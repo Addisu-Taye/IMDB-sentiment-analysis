@@ -1,3 +1,15 @@
+# Created by: Addisu Taye
+# Date: 28-JUN-2025
+# Purpose: This script provides sentiment prediction for movie reviews using a pre-trained
+#          TF-IDF vectorizer and Logistic Regression model. It incorporates advanced
+#          text preprocessing, including negation handling, to improve accuracy.
+# Key Features:
+#   - Loads pre-trained sentiment analysis models (TF-IDF vectorizer and Logistic Regression).
+#   - Implements robust text cleaning (HTML removal, lowercasing, special character filtering).
+#   - Includes a custom NegationHandler to explicitly mark negated words (e.g., "not good" becomes "good_neg").
+#   - Provides a rule-based override to force negative classification if negation is detected.
+#   - Outputs the predicted sentiment and its confidence score.
+
 import pickle
 import re
 import os

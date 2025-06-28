@@ -1,3 +1,17 @@
+# Created by: Addisu Taye
+# Date: 28-JUN-2025
+# Purpose: This script trains a sentiment analysis model using TF-IDF for feature
+#          extraction and Logistic Regression for classification. It includes
+#          robust text preprocessing, notably negation handling, and saves
+#          the trained model artifacts for later prediction.
+# Key Features:
+#   - Loads training and testing data from CSV files.
+#   - Implements comprehensive text cleaning, including HTML removal and lowercasing.
+#   - Integrates a custom NegationHandler to explicitly mark negated words.
+#   - Utilizes TF-IDF Vectorization with n-grams to convert text into numerical features.
+#   - Trains a Logistic Regression model for binary sentiment classification.
+#   - Evaluates the model's performance on a test set.
+#   - Saves the trained TF-IDF Vectorizer and Logistic Regression model to disk.
 import pandas as pd
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.linear_model import LogisticRegression

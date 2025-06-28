@@ -135,3 +135,27 @@ python src/predict.py "The acting was not good at all."
 * Expand the dataset size for training.
 
 * Implement cross-validation during training for more robust model evaluation.
+## Using the User Interface
+
+1.  **Run the Flask application:**
+    * Open your terminal and navigate to the project's root directory (where `app.py` is located).
+    * Activate your virtual environment (if you are using one).
+    * Run the command: `python app.py`
+    * The application will start, and you'll see a message indicating the server address (usually `http://0.0.0.0:5000` or `http://127.0.0.1:5000`).
+
+2.  **Open the UI in your web browser:**
+    * Open your web browser and go to the address shown in the terminal (e.g., `http://localhost:5000`).
+
+3.  **Enter review text:**
+    * You'll see a text area where you can enter your movie review.
+
+4.  **Predict sentiment:**
+    * Click the "Predict Sentiment" button.
+
+5.  **View the results:**
+    * The predicted sentiment (Positive or Negative) and a confidence score will be displayed below the button.
+
+### Screenshot of the User Interface
+```
+        ![IMDb Sentiment Analyzer UI](images/app_screen_shot.png)
+```

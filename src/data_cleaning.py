@@ -1,3 +1,16 @@
+# Created by: Addisu Taye
+# Date: 28-JUN-2025
+# Purpose: This script provides comprehensive text preprocessing functions
+#          designed for sentiment analysis tasks. It includes functionalities
+#          for basic text cleaning (like HTML removal and lowercasing) and
+#          advanced negation handling to correctly interpret sentiment in
+#          phrases containing negation words.
+# Key Features:
+#   - `NegationHandler` class: Manages the identification and marking of negated words
+#     to explicitly signal inverse sentiment.
+#   - `clean_text` function: Orchestrates various cleaning steps including HTML removal,
+#     lowercasing, negation handling, and general character filtering.
+#   - Ensures consistent preprocessing for both model training and prediction.
 import os
 import re
 import pandas as pd
