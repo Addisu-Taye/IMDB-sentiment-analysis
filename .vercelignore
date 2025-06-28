@@ -1,0 +1,9 @@
+# Exclude the entire data folder
+data/
+
+# You can also exclude other development-only files or folders:
+.git/
+.venv/
+__pycache__/
+*.pyc
+*.ipynb  # If you have Jupyter notebooks

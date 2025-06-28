@@ -1,69 +1,44 @@
-# Created by: Addisu Taye
-# Date: 28-JUN-2025
-# Purpose: This Flask API serves as an endpoint for predicting the sentiment
-#          of movie review texts. It leverages the pre-trained sentiment
-#          analysis model and preprocessing logic defined in `src/predict.py`.
-# Key Features:
-#   - Exposes a POST endpoint `/predict` for sentiment inference.
-#   - Accepts JSON input containing the text to be analyzed.
-#   - Returns the predicted sentiment (positive/negative) and a confidence score
-#     in JSON format.
-#   - Integrates the advanced text preprocessing and model prediction pipeline.
-#   - Serves a simple web-based user interface for easy interaction.
+# app.py
+from flask import Flask, request, render_template, jsonify
+import os
+import sys
 
-from flask import Flask, request, jsonify, render_template # Added render_template
-from src.predict import predict_sentiment 
+# Add the current directory to the path for module imports
+# This is usually needed for local development and can help with Vercel too
+# if your src folder is not directly in the path for imports.
+current_dir = os.path.dirname(os.path.abspath(__file__))
+sys.path.insert(0, current_dir)
 
-# Initialize the Flask application
-app = Flask(__name__)
+# Now import your prediction function
+from src.predict import predict_sentiment # Assuming predict_sentiment is in src/predict.py
 
-# New Route: Serve the main HTML page
+app = Flask(__name__,
+            static_folder='static',
+            template_folder='templates')
+
+# Route for the home page (where your HTML UI is)
 @app.route('/')
-def index():
-    """
-    Renders the main index.html page, which provides the user interface
-    for entering text and getting sentiment predictions.
-    """
-    return render_template('index.html')
+def home():
+    return render_template('index.html') # Ensure you have an index.html in your templates folder
 
+# Route for the prediction API endpoint
 @app.route('/predict', methods=['POST'])
 def predict():
-    """
-    Handles POST requests to the /predict endpoint.
-    It expects a JSON payload with a 'text' key containing the movie review.
-    
-    Example JSON request body:
-    {
-        "text": "This movie was absolutely fantastic!"
-    }
-    
-    Returns:
-        JSON response containing the predicted sentiment ('positive' or 'negative')
-        and the confidence score.
-        Example: {'sentiment': 'positive', 'confidence': 95.5}
-    """
-    data = request.get_json()
+    try:
+        data = request.get_json()
+        text = data.get('text', '')
 
-    if not data:
+        if not text:
+            return jsonify({'error': 'No text provided'}), 400
+
+        sentiment, confidence = predict_sentiment(text)
         return jsonify({
-            'error': 'Invalid JSON or missing data in request body.',
-            'message': 'Please send a JSON object with a "text" key.'
-        }), 400 
-
-    text = data.get('text', '').strip() 
-
-    if not text:
-        return jsonify({
-            'error': 'Text field is empty.',
-            'message': 'The "text" field in the JSON request cannot be empty.'
-        }), 400 
-
-    sentiment, confidence = predict_sentiment(text)
-
-    return jsonify({
-        'sentiment': sentiment,
-        'confidence': confidence
-    })
+            'sentiment': sentiment,
+            'confidence': confidence
+        })
+    except Exception as e:
+        print(f"Prediction error: {e}") # Log error for debugging in Vercel logs
+        return jsonify({'error': 'An internal error occurred during prediction'}), 500
 
 if __name__ == '__main__':
-    app.run(debug=True, host='0.0.0.0', port=5000)
+    app.run(debug=True)
