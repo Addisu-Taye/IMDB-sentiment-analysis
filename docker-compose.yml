@@ -1,0 +1,19 @@
+version: '3.8'
+
+services:
+  ml-service:
+    build: .
+    volumes:
+      - ./model:/app/model  # Persist model data
+    ports:
+      - "5000:5000"  # For the Flask API
+    command: >
+      bash -c "python train.py && 
+      python app.py"  # Train then start API
+
+  # Alternative for just prediction
+  predictor:
+    build: .
+    volumes:
+      - ./model:/app/model
+    command: ["python", "predict.py"]
