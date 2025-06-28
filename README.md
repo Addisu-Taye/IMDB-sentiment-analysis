@@ -5,19 +5,7 @@ This project demonstrates a machine learning approach to classify movie reviews 
 ## Project Structure
 
 ```bash
-├── data/
-│   ├── imdb_dataset.csv    # Raw data (50K reviews)
-│   ├── train_5k.csv        # Processed training set (4K)
-│   └── test_5k.csv         # Processed test set (1K)
-├── model/
-│   ├── model.pkl           # Trained classifier
-│   └── vectorizer.pkl      # TF-IDF vectorizer
-├── src/
-│   ├── data_cleaning.py    # Data preprocessing
-│   ├── train.py           # Training script
-│   └── predict.py         # Prediction script
-├── requirements.txt       # Python dependencies
-└── README.md              
+
 imdb-sentiment-analysis/
 ├── app.py                     <-- Updated Flask app
 ├── data/
