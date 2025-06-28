@@ -108,27 +108,30 @@ Run the training script to generate the `vectorizer.pkl` and `model.pkl` files:
 
 ```bash
 python src/train.py
-This script will output the test accuracy of the trained model.
-
-Predicting Sentiment
+##This script will output the test accuracy of the trained model.
+```
+## Predicting Sentiment
 After training, you can use the prediction script to test new movie reviews:
 
-Bash
+``` Bash
 
 python src/predict.py "This movie was fantastic!"
-Example with negation:
-
-Bash
+```
+## Example with negation:
+```bash
 
 python src/predict.py "I do not love it, it was awful."
-Bash
+```
+``` Bash
 
 python src/predict.py "The acting was not good at all."
-Future Enhancements
-Experiment with more advanced deep learning models (e.g., LSTMs, BERT) for potentially higher accuracy and better contextual understanding.
+```
+### Future Enhancements
 
-Integrate more sophisticated negation scope detection (e.g., identifying when negation ends due to punctuation).
+* Experiment with more advanced deep learning models (e.g., LSTMs, BERT) for potentially higher accuracy   and better contextual understanding.
 
-Expand the dataset size for training.
+* Integrate more sophisticated negation scope detection (e.g., identifying when negation ends due to punctuation).
 
-Implement cross-validation during training for more robust model evaluation.
+* Expand the dataset size for training.
+
+* Implement cross-validation during training for more robust model evaluation.
