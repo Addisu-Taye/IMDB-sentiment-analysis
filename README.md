@@ -1,91 +1,64 @@
-# IMDb Sentiment Analysis Pipeline
-Prepared By:Addisu Taye Dadi
-Date:27-JUN-2025
-## Project Overview
-A machine learning pipeline for sentiment analysis on IMDb movie reviews using:
-- TF-IDF vectorization
-- Logistic Regression classifier
-- 5,000 balanced samples (2,500 positive/negative)
+# IMDb Sentiment Analysis
 
-## Project Structure
+```text
 imdb-sentiment-analysis/
-├── venv/ # Virtual environment (ignored)
-├── data/ # Dataset storage
-│ ├── imdb_dataset.csv # Raw data
-│ ├── train_5k.csv # Processed training data
-│ └── test_5k.csv # Processed test data
-├── model/ # Saved models
-│ ├── model.pkl
-│ └── vectorizer.pkl
-├── notebooks/ # EDA and analysis
-│ └── EDA.ipynb
-├── src/ # Source code
-│ ├── data_cleaning.py
-│ ├── train.py
-│ ├── predict.py
-│ └── app.py
-├── requirements.txt # Dependencies
-└── README.md # This file
+├── data/
+│   ├── imdb_dataset.csv
+│   ├── train_5k.csv
+│   └── test_5k.csv
+├── model/
+│   ├── model.pkl
+│   └── vectorizer.pkl
+├── src/
+│   ├── data_cleaning.py
+│   ├── train.py
+│   └── predict.py
+├── requirements.txt
+└── README.md
+Installation
+bash
+# Create and activate virtual environment
+python -m venv venv
+.\venv\Scripts\activate  # Windows
+source venv/bin/activate # Linux/Mac
 
-text
-
-## Setup Instructions
-
-1. **Create Virtual Environment**:
-   ```powershell
-   python -m venv venv
-   .\venv\Scripts\activate
-Install Dependencies:
-
-powershell
+# Install dependencies
 pip install -r requirements.txt
-Prepare Data:
-
-powershell
-python src/data_cleaning.py
-Usage
 Training
-powershell
+bash
+# Prepare 5,000 sample dataset
+python src/data_cleaning.py
+
+# Train model
 python src/train.py
 Output:
 
 text
-Loaded 4000 training samples (50.0% positive)
+Loaded 4000 samples (50% positive)
 Test Accuracy: 86.50%
+Model saved to model/
 Prediction
-powershell
-python src/predict.py "This movie was fantastic!"
-Output:
+bash
+python src/predict.py "Your review text"
+Examples:
 
-text
-positive (confidence: 92.3%)
-Flask API
-powershell
-python src/app.py
-Endpoint: POST /predict
+bash
+$ python src/predict.py "Great movie!"
+positive (confidence: 92%)
 
-Key Files
-File	Purpose
-data_cleaning.py	Cleans and samples 5,000 reviews
-train.py	Trains and saves model
-predict.py	CLI prediction interface
-app.py	REST API endpoint
-Technical Details
-Data: Balanced 5,000 sample subset of IMDb reviews
+$ python src/predict.py "Terrible acting"
+negative (confidence: 88%)
+Technical Specs
+Component	Details
+Dataset	5,000 balanced reviews
+Vectorizer	TF-IDF (5,000 features)
+Model	Logistic Regression
+Accuracy	86-88%
+Troubleshooting
+Missing dependencies: pip install -r requirements.txt
 
-Vectorization: TF-IDF with 5,000 features
+Path errors: Use \\ in Windows paths
 
-Model: Logistic Regression
+Low confidence: Retrain with more data
 
-Accuracy: ~86-88% on test set
-
-Windows Notes
-Use PowerShell for best results
-
-Paths should use either:
-
-python
-'data\\train_5k.csv'  # Double backslash
-r'data\train_5k.csv'   # Raw string
-License
-MIT License - Free for academic and commercial use
+📝 License: MIT
