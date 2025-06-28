@@ -17,7 +17,28 @@ This project demonstrates a machine learning approach to classify movie reviews 
 │   ├── train.py           # Training script
 │   └── predict.py         # Prediction script
 ├── requirements.txt       # Python dependencies
-└── README.md              # This document
+└── README.md              
+imdb-sentiment-analysis/
+├── app.py                     <-- Updated Flask app
+├── data/
+│   ├── train_5k.csv        # Processed training set (4K)
+│   └── test_5k.csv         # Processed test set (1K)
+├── model/
+│   ├── vectorizer.pkl      # TF-IDF vectorizer
+│   └── model.pkl           # Trained classifier
+├── src/
+│   ├── train.py            # Training script
+│   ├── predict.py          # Prediction script
+│   └── data_cleaning.py    # Data preprocessing
+├── static/                    
+│   ├── script.js              
+│   └── style.css              
+├── templates/                
+│   └── index.html            
+│── requirements.txt       # Python dependencies
+│── docker-compose.yml       # docker-compose.yml
+│── docker                  # docker
+└── README.md                   # This document
 ```
 
 ## Methodology
@@ -156,6 +177,5 @@ python src/predict.py "The acting was not good at all."
     * The predicted sentiment (Positive or Negative) and a confidence score will be displayed below the button.
 
 ### Screenshot of the User Interface
-```
-        ![IMDb Sentiment Analyzer UI](images/app_screen_shot.png)
-```
+
+![IMDb Sentiment Analyzer UI](images/app_screen_shot.png)
