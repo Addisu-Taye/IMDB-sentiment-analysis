@@ -4,17 +4,20 @@ This project demonstrates a machine learning approach to classify movie reviews 
 
 ## Project Structure
 
-.
+```bash
 ├── data/
-│   ├── train_5k.csv    # Training dataset (5,000 samples)
-│   └── test_5k.csv     # Testing dataset (5,000 samples)
+│   ├── imdb_dataset.csv    # Raw data (50K reviews)
+│   ├── train_5k.csv        # Processed training set (4K)
+│   └── test_5k.csv         # Processed test set (1K)
 ├── model/
-│   ├── vectorizer.pkl  # Saved TF-IDF Vectorizer
-│   └── model.pkl       # Saved trained Logistic Regression model
+│   ├── model.pkl           # Trained classifier
+│   └── vectorizer.pkl      # TF-IDF vectorizer
 ├── src/
-│   ├── train.py        # Script for training the sentiment analysis model
-│   └── predict.py      # Script for predicting sentiment of new text
-└── README.md
+│   ├── data_cleaning.py    # Data preprocessing
+│   ├── train.py           # Training script
+│   └── predict.py         # Prediction script
+├── requirements.txt       # Python dependencies
+└── README.md              # This document
 
 
 ## Methodology
